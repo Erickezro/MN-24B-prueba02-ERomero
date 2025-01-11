@@ -96,6 +96,44 @@ def eliminacion_gaussiana(A: np.ndarray) -> np.ndarray:
 
 
 # ####################################################################
+def eliminacion_gaussiana2(A: np.ndarray) -> np.ndarray:
+    """Realiza la eliminación gaussiana sobre la matriz A para convertirla en una forma triangular superior.
+
+    ## Parameters
+    A : np.ndarray
+        Matriz cuadrada de tamaño n x n.
+
+    ## Return
+    A : np.ndarray
+        Matriz transformada a triangular superior.
+    """
+    n = A.shape[0]
+
+    for i in range(n):
+        # Buscar el pivote (el valor máximo en la columna i)
+        p = None
+        for pi in range(i, n):
+            if A[pi, i] != 0:
+                if p is None or abs(A[pi, i]) > abs(A[p, i]):
+                    p = pi
+
+        if p is None:
+            raise ValueError("La matriz es singular y no tiene determinante.")
+
+        if p != i:
+            # Intercambiar filas si es necesario
+            A[[i, p]] = A[[p, i]]
+
+        # Hacer ceros los elementos debajo del pivote
+        for j in range(i + 1, n):
+            if A[j, i] != 0:
+                factor = A[j, i] / A[i, i]
+                A[j, i:] -= factor * A[i, i:]
+
+    return A
+
+
+# ####################################################################
 def descomposicion_LU(A: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     """Realiza la descomposición LU de una matriz cuadrada A.
     [IMPORTANTE] No se realiza pivoteo.
